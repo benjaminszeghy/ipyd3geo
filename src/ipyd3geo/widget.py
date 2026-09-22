@@ -22,7 +22,23 @@ class GeoJSON(Layer):
         raise NotImplementedError
 
 
-class Map:
+class Map(anywidget.AnyWidget):
+    _esm = """
+    import * as d3 from "https://esm.sh/d3-geo@3";
+
+    function render({ el }) {
+      const path = d3.geoPath(d3.geoEqualEarth());
+
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      const sphere = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      sphere.setAttribute("d", path({ type: "Sphere" }));
+      svg.appendChild(sphere);
+      el.appendChild(svg);
+    }
+
+    export default { render };
+    """
+
     class Export:
         def __init__(self, map):
             self._map = map
@@ -31,7 +47,7 @@ class Map:
             raise NotImplementedError
 
     def __init__(self, center=(0.0, 0.0), zoom=1.0, projection="geoEqualEarth", graticule=False, border=True):
-        raise NotImplementedError
+        super().__init__()
         self.export = Map.Export(self)
 
     def add(self, layer):
