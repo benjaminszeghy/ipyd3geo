@@ -1,2 +1,2 @@
-def hello() -> str:
-    return "Hello from ipyd3geo!"
+from .widget import Map
+
