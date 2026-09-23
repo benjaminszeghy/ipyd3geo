@@ -36,7 +36,7 @@ class Map(anywidget.AnyWidget):
       const sphere = document.createElementNS("http://www.w3.org/2000/svg", "path");
       sphere.setAttribute("d", path({ type: "Sphere" }));
       sphere.setAttribute("fill", "none");
-      sphere.setAttribute("stroke", "black");
+      sphere.setAttribute("stroke", model.get("border") ? "black" : "none");
       svg.appendChild(sphere);
       el.appendChild(svg);
     }
@@ -45,6 +45,7 @@ class Map(anywidget.AnyWidget):
     """
 
     projection = traitlets.Unicode("geoEqualEarth").tag(sync=True)
+    border = traitlets.Bool(True).tag(sync=True)
 
     class Export:
         def __init__(self, map):
@@ -60,10 +61,9 @@ class Map(anywidget.AnyWidget):
             raise NotImplementedError
         if graticule is not False:
             raise NotImplementedError
-        if border is not True:
-            raise NotImplementedError
         super().__init__()
         self.projection = projection
+        self.border = border
         self.export = Map.Export(self)
 
     def add(self, layer):
