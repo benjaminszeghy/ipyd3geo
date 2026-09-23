@@ -50,10 +50,12 @@ class Map(anywidget.AnyWidget):
         def svg(self, path):
             raise NotImplementedError
 
-    def __init__(self, center=(0.0, 0.0), zoom=1.0, projection=None, graticule=False, border=True, basemap="naturalearth", hamburger=True, ):
+    def __init__(self, center=(0.0, 0.0), zoom=1.0, projection=None, graticule=False, border=True, basemap="naturalearth", hamburger=True, draggable=False):
         if center != (0.0, 0.0):
             raise NotImplementedError
         if zoom != 1.0:
+            raise NotImplementedError
+        if draggable is not False:
             raise NotImplementedError
         if hamburger is not True:
             raise NotImplementedError
