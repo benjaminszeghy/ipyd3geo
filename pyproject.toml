@@ -3,6 +3,7 @@ name = "ipyd3geo"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
+license = "BSD-3-Clause"
 authors = [
     { name = "Benjamin Szeghy", email = "benjamin.szeghy@berkeley.edu" }
 ]
