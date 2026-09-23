@@ -35,6 +35,8 @@ class Map(anywidget.AnyWidget):
       svg.setAttribute("height", "500");
       const sphere = document.createElementNS("http://www.w3.org/2000/svg", "path");
       sphere.setAttribute("d", path({ type: "Sphere" }));
+      sphere.setAttribute("fill", "none");
+      sphere.setAttribute("stroke", "black");
       svg.appendChild(sphere);
       el.appendChild(svg);
     }
