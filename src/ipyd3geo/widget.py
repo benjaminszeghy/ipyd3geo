@@ -64,10 +64,12 @@ class Map(anywidget.AnyWidget):
         def svg(self, path):
             raise NotImplementedError
 
-    def __init__(self, center=(0.0, 0.0), zoom=1.0, projection="geoEqualEarth", graticule=False, border=True):
+    def __init__(self, center=(0.0, 0.0), zoom=1.0, projection="geoEqualEarth", graticule=False, border=True, hamburger=True):
         if center != (0.0, 0.0):
             raise NotImplementedError
         if zoom != 1.0:
+            raise NotImplementedError
+        if hamburger is not True:
             raise NotImplementedError
         super().__init__()
         self.projection = projection
