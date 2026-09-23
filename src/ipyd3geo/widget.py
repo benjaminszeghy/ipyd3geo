@@ -30,6 +30,9 @@ class Map(anywidget.AnyWidget):
       const path = d3.geoPath(d3[model.get("projection")]());
 
       const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("viewBox", "0 0 960 500");
+      svg.setAttribute("width", "960");
+      svg.setAttribute("height", "500");
       const sphere = document.createElementNS("http://www.w3.org/2000/svg", "path");
       sphere.setAttribute("d", path({ type: "Sphere" }));
       svg.appendChild(sphere);
