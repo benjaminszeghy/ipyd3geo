@@ -25,15 +25,11 @@ class GeoJSON(Layer):
 
 class Projection:
     def __init__(self, name="geoEqualEarth", rotate=(0, 0, 0), center=None, precision=None, parallels=None):
-        if rotate != (0, 0, 0):
-            raise NotImplementedError
-        if center is not None:
-            raise NotImplementedError
-        if precision is not None:
-            raise NotImplementedError
-        if parallels is not None:
-            raise NotImplementedError
         self.name = name
+        self.rotate = tuple(rotate)
+        self.center = center
+        self.precision = precision
+        self.parallels = parallels
 
 
 class Map(anywidget.AnyWidget):
@@ -42,6 +38,10 @@ class Map(anywidget.AnyWidget):
     projection = traitlets.Unicode("geoEqualEarth").tag(sync=True)
     border = traitlets.Bool(True).tag(sync=True)
     graticule = traitlets.Bool(False).tag(sync=True)
+    projection_rotate = traitlets.Tuple(traitlets.Float(), traitlets.Float(), traitlets.Float(), default_value=(0, 0, 0)).tag(sync=True)
+    projection_center = traitlets.Tuple(traitlets.Float(), traitlets.Float(), allow_none=True, default_value=None).tag(sync=True)
+    projection_precision = traitlets.Float(allow_none=True, default_value=None).tag(sync=True)
+    projection_parallels = traitlets.Tuple(traitlets.Float(), traitlets.Float(), allow_none=True, default_value=None).tag(sync=True)
 
     class Export:
         def __init__(self, map):
@@ -67,6 +67,10 @@ class Map(anywidget.AnyWidget):
             projection = Projection(projection)
         super().__init__()
         self.projection = projection.name
+        self.projection_rotate = projection.rotate
+        self.projection_center = projection.center
+        self.projection_precision = projection.precision
+        self.projection_parallels = projection.parallels
         self.border = border
         self.graticule = graticule
         self.export = Map.Export(self)

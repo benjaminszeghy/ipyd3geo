@@ -4,7 +4,15 @@ async function render({ model, el }) {
   const countries = await fetch(
     "https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector/geojson/ne_110m_admin_0_countries.geojson"
   ).then((res) => res.json());
-  const path = d3.geoPath(d3[model.get("projection")]());
+  const projection = d3[model.get("projection")]();
+  projection.rotate(model.get("projection_rotate"));
+  const center = model.get("projection_center");
+  if (center) projection.center(center);
+  const precision = model.get("projection_precision");
+  if (precision != null) projection.precision(precision);
+  const parallels = model.get("projection_parallels");
+  if (parallels) projection.parallels(parallels);
+  const path = d3.geoPath(projection);
 
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", "0 0 960 500");
