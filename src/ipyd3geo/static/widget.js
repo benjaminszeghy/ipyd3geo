@@ -1,9 +1,11 @@
 import * as d3 from "https://esm.sh/d3-geo@3";
 
 async function render({ model, el }) {
+  
   const countries = await fetch(
     "https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector/geojson/ne_110m_admin_0_countries.geojson"
   ).then((res) => res.json());
+
   const projection = d3[model.get("projection")]();
   projection.rotate(model.get("projection_rotate"));
   const center = model.get("projection_center");
