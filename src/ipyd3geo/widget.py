@@ -23,6 +23,18 @@ class GeoJSON(Layer):
     def __init__(self, data, name=""):
         raise NotImplementedError
 
+class Projection:
+    def __init__(self, name="geoEqualEarth", rotate=(0, 0, 0), center=None, precision=None, parallels=None):
+        if rotate != (0, 0, 0):
+            raise NotImplementedError
+        if center is not None:
+            raise NotImplementedError
+        if precision is not None:
+            raise NotImplementedError
+        if parallels is not None:
+            raise NotImplementedError
+        self.name = name
+
 
 class Map(anywidget.AnyWidget):
     _esm = pathlib.Path(__file__).parent / "static" / "widget.js"
@@ -38,7 +50,7 @@ class Map(anywidget.AnyWidget):
         def svg(self, path):
             raise NotImplementedError
 
-    def __init__(self, center=(0.0, 0.0), zoom=1.0, projection="geoEqualEarth", graticule=False, border=True, basemap="naturalearth", hamburger=True):
+    def __init__(self, center=(0.0, 0.0), zoom=1.0, projection=None, graticule=False, border=True, basemap="naturalearth", hamburger=True, ):
         if center != (0.0, 0.0):
             raise NotImplementedError
         if zoom != 1.0:
@@ -47,8 +59,12 @@ class Map(anywidget.AnyWidget):
             raise NotImplementedError
         if basemap != "naturalearth":
             raise NotImplementedError
+        if projection is None:
+            projection = Projection()
+        elif isinstance(projection, str):
+            projection = Projection(projection)
         super().__init__()
-        self.projection = projection
+        self.projection = projection.name
         self.border = border
         self.graticule = graticule
         self.export = Map.Export(self)
