@@ -88,9 +88,13 @@ class Projection:
         self.parallels = parallels
 
 class Layer:
-    """Base class for all layers in the map widget. **Not implemented yet.**"""
+    """Base class for all layers in the map widget.
+
+    Args:
+        name (str): The name of the layer.
+    """
     def __init__(self, name=""):
-        raise NotImplementedError
+        self.name = name
 
 class Point(Layer):
     """A point layer on the map. **Not implemented yet.**"""
