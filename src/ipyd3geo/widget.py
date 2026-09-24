@@ -112,5 +112,10 @@ class GeoJSON(Layer):
     def __init__(self, data, name=""):
         raise NotImplementedError
 
+class GeoData(Layer):
+    """A GeoDataFrame (such as from geopandas) layer on the map. **Not implemented yet.**"""
+    def __init__(self, data, name=""):
+        raise NotImplementedError
+
 if __name__ == "__main__":
     pass
