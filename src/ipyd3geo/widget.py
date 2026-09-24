@@ -112,3 +112,7 @@ class Projection:
         self.center = center
         self.precision = precision
         self.parallels = parallels
+
+
+if __name__ == "__main__":
+    pass
