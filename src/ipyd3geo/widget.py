@@ -4,6 +4,8 @@ import pathlib
 import anywidget
 import traitlets
 
+import json
+
 class Map(anywidget.AnyWidget):
     """Defines a D3-Geo backed map widget for Jupyter notebooks.
 
@@ -112,9 +114,29 @@ class Line(Layer):
         raise NotImplementedError
 
 class GeoJSON(Layer):
-    """A GeoJSON layer on the map. **Not implemented yet.**"""
+    """A GeoJSON layer on the map.
+
+    Args:
+        data (dict, str, or pathlib.Path): GeoJSON as a dict, a JSON string, or a path to a GeoJSON file.
+        name (str): The name of the layer.
+    """
     def __init__(self, data, name=""):
-        raise NotImplementedError
+        super().__init__(name)
+        if isinstance(data, pathlib.Path):
+            with open(data, "r") as f:
+                data = json.load(f)
+        elif type(data) is str:
+            if not data.strip().startswith("{"):
+                if pathlib.Path(data).exists():
+                    with open(data, "r") as f:
+                        data = json.load(f)
+                else:
+                    raise ValueError(f"data string is not a valid JSON or file path: {data}")
+            else:
+                data = json.loads(data)
+        elif not isinstance(data, dict):
+            raise TypeError("data must be a dict, str, or pathlib.Path")
+        self.data = data
 
 class GeoData(Layer):
     """A GeoDataFrame (such as from geopandas) layer on the map. **Not implemented yet.**"""
