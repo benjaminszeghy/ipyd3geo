@@ -70,6 +70,22 @@ class Map(anywidget.AnyWidget):
 
 Map.__signature__ = inspect.Signature(list(inspect.signature(Map.__init__).parameters.values())[1:])
 
+class Projection:
+    """Defines a D3-Geo projection for the map widget.
+
+    Args:
+        name (str): The name of the projection. Defaults to "geoEqualEarth". See `d3-geo geoProjection docs <https://d3js.org/d3-geo/projection#geoProjection>`_ for options.
+        rotate (tuple): The rotation of the projection.
+        center (tuple): The center of the projection.
+        precision (float): The precision of the projection.
+        parallels (tuple): The parallels of the projection. Only applicable for conic projections.
+    """
+    def __init__(self, name="geoEqualEarth", rotate=(0, 0, 0), center=None, precision=None, parallels=None):
+        self.name = name
+        self.rotate = tuple(rotate)
+        self.center = center
+        self.precision = precision
+        self.parallels = parallels
 
 class Layer:
     """Base class for all layers in the map widget. **Not implemented yet.**"""
@@ -95,24 +111,6 @@ class GeoJSON(Layer):
     """A GeoJSON layer on the map. **Not implemented yet.**"""
     def __init__(self, data, name=""):
         raise NotImplementedError
-
-class Projection:
-    """Defines a D3-Geo projection for the map widget.
-
-    Args:
-        name (str): The name of the projection. Defaults to "geoEqualEarth". See `d3-geo geoProjection docs <https://d3js.org/d3-geo/projection#geoProjection>`_ for options.
-        rotate (tuple): The rotation of the projection.
-        center (tuple): The center of the projection.
-        precision (float): The precision of the projection.
-        parallels (tuple): The parallels of the projection. Only applicable for conic projections.
-    """
-    def __init__(self, name="geoEqualEarth", rotate=(0, 0, 0), center=None, precision=None, parallels=None):
-        self.name = name
-        self.rotate = tuple(rotate)
-        self.center = center
-        self.precision = precision
-        self.parallels = parallels
-
 
 if __name__ == "__main__":
     pass
