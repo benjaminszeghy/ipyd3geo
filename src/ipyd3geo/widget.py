@@ -121,5 +121,15 @@ class GeoData(Layer):
     def __init__(self, data, name=""):
         raise NotImplementedError
 
+class Raster(Layer):
+    """A local raster layer on the map. **Not implemented yet.**"""
+    def __init__(self, data, name=""):
+        raise NotImplementedError
+
+class TileService(Layer):
+    """Raster tiles from a service. **Not implemented yet.**"""
+    def __init__(self, url, name=""):
+        raise NotImplementedError
+
 if __name__ == "__main__":
     pass
