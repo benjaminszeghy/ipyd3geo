@@ -31,6 +31,21 @@ async function render({ model, el }) {
   naturalEarth.setAttribute("fill", "none");
   naturalEarth.setAttribute("stroke", "black");
   svg.appendChild(naturalEarth);
+  
+  const layerGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  svg.appendChild(layerGroup);
+  function drawLayers() {
+    layerGroup.replaceChildren();
+    for (const data of model.get("layers")) {
+      const layer = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      layer.setAttribute("d", path(data));
+      layer.setAttribute("fill", "none");
+      layer.setAttribute("stroke", "#000000");
+      layerGroup.appendChild(layer);
+    }
+  }
+  drawLayers();
+  model.on("change:layers", drawLayers);
 
   if (model.get("graticule")) {
     const graticule = document.createElementNS("http://www.w3.org/2000/svg", "path");

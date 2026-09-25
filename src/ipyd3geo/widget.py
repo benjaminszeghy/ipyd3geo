@@ -29,6 +29,7 @@ class Map(anywidget.AnyWidget):
     projection_center = traitlets.Tuple(traitlets.Float(), traitlets.Float(), allow_none=True, default_value=None).tag(sync=True)
     projection_precision = traitlets.Float(allow_none=True, default_value=None).tag(sync=True)
     projection_parallels = traitlets.Tuple(traitlets.Float(), traitlets.Float(), allow_none=True, default_value=None).tag(sync=True)
+    layers = traitlets.List().tag(sync=True)
 
     class Export:
         def __init__(self, map):
@@ -63,8 +64,8 @@ class Map(anywidget.AnyWidget):
         self.export = Map.Export(self)
 
     def add(self, layer):
-        """Add a layer to the map. **Not implemented yet.**"""
-        raise NotImplementedError
+        """Add a layer to the map. Only GeoJSON layers are supported so far."""
+        self.layers = [*self.layers, layer.data]
 
     def remove(self, layer):
         """Remove a layer from the map. **Not implemented yet.**"""
