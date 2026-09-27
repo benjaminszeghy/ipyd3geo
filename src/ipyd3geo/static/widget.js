@@ -43,6 +43,9 @@ async function render({ model, el }) {
         layer.setAttribute("d", path(feature));
         layer.setAttribute("fill", style.fill_color || "none");
         layer.setAttribute("stroke", style.stroke_color || "#000000");
+        layer.setAttribute("stroke-width", style.weight || 3);
+        layer.setAttribute("stroke-opacity", style.stroke_opacity || 1.0);
+        layer.setAttribute("fill-opacity", style.fill_opacity || 0.2);
         layerGroup.appendChild(layer);
       }
     }
