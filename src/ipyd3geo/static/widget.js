@@ -36,12 +36,15 @@ async function render({ model, el }) {
   svg.appendChild(layerGroup);
   function drawLayers() {
     layerGroup.replaceChildren();
-    for (const data of model.get("layers")) {
-      const layer = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      layer.setAttribute("d", path(data));
-      layer.setAttribute("fill", "none");
-      layer.setAttribute("stroke", "#000000");
-      layerGroup.appendChild(layer);
+    for (const layerData of model.get("layers")) {
+      for (const feature of layerData.features) {
+        const style = feature.properties.__ipyd3geo_style__ || {};
+        const layer = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        layer.setAttribute("d", path(feature));
+        layer.setAttribute("fill", style.fill_color || "none");
+        layer.setAttribute("stroke", style.stroke_color || "#000000");
+        layerGroup.appendChild(layer);
+      }
     }
   }
   drawLayers();

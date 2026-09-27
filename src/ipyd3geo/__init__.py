@@ -1,4 +1,4 @@
-from .widget import Map, Projection
+from .widget import Map, Projection, GeoJSON, VectorStyle
 
-__all__ = ["Map", "Projection"]
+__all__ = ["Map", "Projection", "GeoJSON", "VectorStyle"]
 
