@@ -90,6 +90,22 @@ class Projection:
         self.precision = precision
         self.parallels = parallels
 
+class VectorStyle:
+
+    def __init__(self, stroke_color="#000000", fill_color="#ffffff", weight=3, stroke_opacity=1.0, fill_opacity=1.0):
+        self.stroke_color = stroke_color
+        self.fill_color = fill_color
+        self.weight = weight
+        self.stroke_opacity = stroke_opacity
+        self.fill_opacity = fill_opacity
+
+    def resolve(self, properties):
+        """Return the concrete style for one feature. Callables receive the feature's properties."""
+        return {
+            attribute: value(properties) if callable(value) else value
+            for attribute, value in vars(self).items()
+        }
+
 class Layer:
     """Base class for all layers in the map widget.
 
@@ -120,8 +136,9 @@ class GeoJSON(Layer):
     Args:
         data (dict, str, or pathlib.Path): GeoJSON as a dict, a JSON string, or a path to a GeoJSON file.
         name (str): The name of the layer.
+        style (VectorStyle): The style of the layer.
     """
-    def __init__(self, data, name=""):
+    def __init__(self, data, name="",style=None):
         super().__init__(name)
         if isinstance(data, pathlib.Path):
             with open(data, "r") as f:
@@ -137,7 +154,12 @@ class GeoJSON(Layer):
                 data = json.loads(data)
         elif not isinstance(data, dict):
             raise TypeError("data must be a dict, str, or pathlib.Path")
-        self.data = data
+        style = style or VectorStyle()
+        features = []
+        for f in data.get("features", []):
+            props = f.get("properties") or {}
+            features.append({**f, "properties": {**props, "__ipyd3geo_style__": style.resolve(props)}})
+        self.data = {**data, "features": features}
 
 class GeoData(Layer):
     """A GeoDataFrame (such as from geopandas) layer on the map. **Not implemented yet.**"""
