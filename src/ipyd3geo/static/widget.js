@@ -1,4 +1,6 @@
 import * as d3 from "https://esm.sh/d3-geo@3";
+import { zoom } from "https://esm.sh/d3-zoom@3";
+import { select } from "https://esm.sh/d3-selection@3";
 
 async function render({ model, el }) {
   
@@ -15,23 +17,23 @@ async function render({ model, el }) {
   const parallels = model.get("projection_parallels");
   if (parallels) projection.parallels(parallels);
   const path = d3.geoPath(projection);
+  const baseScale = projection.scale();
+  const baseTranslate = projection.translate();
 
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", "0 0 960 500");
   svg.setAttribute("width", "960");
   svg.setAttribute("height", "500");
   const sphere = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  sphere.setAttribute("d", path({ type: "Sphere" }));
   sphere.setAttribute("fill", "none");
   sphere.setAttribute("stroke", model.get("border") ? "black" : "none");
   svg.appendChild(sphere);
 
   const naturalEarth = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  naturalEarth.setAttribute("d", path(countries));
   naturalEarth.setAttribute("fill", "none");
   naturalEarth.setAttribute("stroke", "black");
   svg.appendChild(naturalEarth);
-  
+
   const layerGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
   svg.appendChild(layerGroup);
   function drawLayers() {
@@ -50,16 +52,49 @@ async function render({ model, el }) {
       }
     }
   }
-  drawLayers();
   model.on("change:layers", drawLayers);
 
+  let graticule = null;
   if (model.get("graticule")) {
-    const graticule = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    graticule.setAttribute("d", path(d3.geoGraticule()()));
+    graticule = document.createElementNS("http://www.w3.org/2000/svg", "path");
     graticule.setAttribute("fill", "none");
     graticule.setAttribute("stroke", "lightgray");
     graticule.setAttribute("opacity", "0.5");
     svg.appendChild(graticule);
+  }
+
+  function redraw() {
+    sphere.setAttribute("d", path({ type: "Sphere" }));
+    naturalEarth.setAttribute("d", path(countries));
+    if (graticule) graticule.setAttribute("d", path(d3.geoGraticule()()));
+    drawLayers();
+  }
+  redraw();
+
+  const dynamic = model.get("dynamic");
+  if (dynamic !== "none") {
+    let prev = { x: 0, y: 0 };
+    const zoomBehavior = zoom().on("zoom", (event) => {
+      const t = event.transform;
+      projection.scale(baseScale * t.k);
+      const isDrag = /^(mouse|touch)move$/.test(event.sourceEvent?.type);
+      if (dynamic === "rotate") {
+        if (isDrag) {
+          const [lambda, phi, gamma] = projection.rotate();
+          const degPerPixel = 180 / (Math.PI * projection.scale());
+          projection.rotate([
+            lambda + (t.x - prev.x) * degPerPixel,
+            phi - (t.y - prev.y) * degPerPixel,
+            gamma,
+          ]);
+        }
+      } else {
+        projection.translate([t.x + baseTranslate[0] * t.k, t.y + baseTranslate[1] * t.k]);
+      }
+      prev = { x: t.x, y: t.y };
+      redraw();
+    });
+    select(svg).call(zoomBehavior);
   }
 
   el.appendChild(svg);

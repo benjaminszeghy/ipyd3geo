@@ -17,7 +17,7 @@ class Map(anywidget.AnyWidget):
         border (bool): Whether to draw a border frame around the map.
         basemap (str): The basemap to use. **Not implemented yet. Currently defaults to Natural Earth small scale borders.**
         hamburger (bool): Whether to show the hamburger menu. **Not implemented yet.**
-        draggable (bool): Whether the map is dynamically draggable. **Not implemented yet.**
+        dynamic (str or bool): Whether the map is dynamically draggable. Value can be True, False, "pan", or "rotate". If True, the map will be draggable, and choose a default mode. If False, the map will not be draggable. If "pan", the map will pan post-projection. If "rotate", the map will be rotatable pre-projection.
     """
 
     _esm = pathlib.Path(__file__).parent / "static" / "widget.js"
@@ -30,6 +30,7 @@ class Map(anywidget.AnyWidget):
     projection_precision = traitlets.Float(allow_none=True, default_value=None).tag(sync=True)
     projection_parallels = traitlets.Tuple(traitlets.Float(), traitlets.Float(), allow_none=True, default_value=None).tag(sync=True)
     layers = traitlets.List().tag(sync=True)
+    dynamic = traitlets.Unicode("pan").tag(sync=True)
 
     class Export:
         def __init__(self, map):
@@ -38,12 +39,10 @@ class Map(anywidget.AnyWidget):
         def svg(self, path):
             raise NotImplementedError
 
-    def __init__(self, center=(0.0, 0.0), zoom=1.0, projection=None, graticule=False, border=True, basemap="naturalearth", hamburger=True, draggable=False):
+    def __init__(self, center=(0.0, 0.0), zoom=1.0, projection=None, graticule=False, border=True, basemap="naturalearth", hamburger=True, dynamic=True):
         if center != (0.0, 0.0):
             raise NotImplementedError
         if zoom != 1.0:
-            raise NotImplementedError
-        if draggable is not False:
             raise NotImplementedError
         if hamburger is not True:
             raise NotImplementedError
@@ -61,6 +60,14 @@ class Map(anywidget.AnyWidget):
         self.projection_parallels = projection.parallels
         self.border = border
         self.graticule = graticule
+        if dynamic is True or dynamic is False:
+            self.dynamic = "pan" if dynamic else "none" #TODO: figure out how to make it decide mode based on whether or not the projection is globe-like
+        elif dynamic == "pan":
+            self.dynamic = "pan"
+        elif dynamic == "rotate":
+            self.dynamic = "rotate"
+        else:
+            raise ValueError(f"dynamic must be True, False, 'pan', or 'rotate'")
         self.export = Map.Export(self)
 
     def add(self, layer):
