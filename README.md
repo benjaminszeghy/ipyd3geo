@@ -24,14 +24,18 @@ However, there are a few tradeoffs:
 ## Installation
 
 ```sh
-## no package has been published yet. stay tuned.
+pip install ipyd3geo
+```
+or 
+```sh
+uv add ipyd3geo
 ```
 
 ## Development
 
 ```sh
 uv sync
-pnpm install
+pnpm install ## No build step is actually needed yet. This will be added in the future
 ```
 
 See [examples/example.ipynb](examples/example.ipynb) for usage.

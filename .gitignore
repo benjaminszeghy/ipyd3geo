@@ -2,3 +2,6 @@ docs/superpowers/
 docs/_build/
 __pycache__/
 *.pyc
+node_modules/
+.venv/
+dist/

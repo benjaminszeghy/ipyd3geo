@@ -1,6 +1,6 @@
-import * as d3 from "https://esm.sh/d3-geo@3";
-import { zoom } from "https://esm.sh/d3-zoom@3";
-import { select } from "https://esm.sh/d3-selection@3";
+import * as d3 from "https://esm.sh/d3-geo@3.1.1";
+import { zoom } from "https://esm.sh/d3-zoom@3.0.0";
+import { select } from "https://esm.sh/d3-selection@3.0.0";
 
 async function render({ model, el }) {
 
