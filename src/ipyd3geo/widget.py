@@ -41,7 +41,17 @@ class Map(anywidget.AnyWidget):
         def svg(self, path):
             raise NotImplementedError
 
-    def __init__(self, center=(0.0, 0.0), zoom=1.0, projection=None, graticule=False, border=True, basemap=False, hamburger=True, dynamic=True):
+    def __init__(
+            self, 
+            center=(0.0, 0.0), 
+            zoom=1.0, 
+            projection=None, 
+            graticule=False, 
+            border=True, 
+            basemap=False, 
+            hamburger=True, 
+            dynamic=True
+        ):
         if center != (0.0, 0.0):
             raise NotImplementedError
         if zoom != 1.0:
@@ -95,7 +105,14 @@ class Projection:
         precision (float): The precision of the projection.
         parallels (tuple): The parallels of the projection. Only applicable for conic projections.
     """
-    def __init__(self, name="geoEqualEarth", rotate=(0, 0, 0), center=None, precision=None, parallels=None):
+    def __init__(
+            self, 
+            name="geoEqualEarth", 
+            rotate=(0, 0, 0), 
+            center=None, 
+            precision=None, 
+            parallels=None
+        ):
         self.name = name
         self.rotate = tuple(rotate)
         self.center = center
@@ -104,7 +121,14 @@ class Projection:
 
 class VectorStyle:
 
-    def __init__(self, stroke_color="#000000", fill_color="#ffffff", weight=3, stroke_opacity=1.0, fill_opacity=1.0):
+    def __init__(
+            self, 
+            stroke_color="#000000", 
+            fill_color="#ffffff", 
+            weight=3, 
+            stroke_opacity=1.0, 
+            fill_opacity=1.0
+        ):
         self.stroke_color = stroke_color
         self.fill_color = fill_color
         self.weight = weight
