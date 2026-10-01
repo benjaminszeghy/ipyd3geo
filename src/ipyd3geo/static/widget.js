@@ -69,6 +69,7 @@ async function render({ model, el }) {
   const baseScale = projection.scale();
   const baseTranslate = projection.translate();
   const basemap = model.get("basemap");
+  const border = model.get("border");
 
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", "0 0 960 500");
@@ -76,7 +77,7 @@ async function render({ model, el }) {
   svg.setAttribute("height", "500");
   const sphere = document.createElementNS("http://www.w3.org/2000/svg", "path");
   sphere.setAttribute("fill", "none");
-  sphere.setAttribute("stroke", model.get("border") ? "black" : "none");
+  sphere.setAttribute("stroke", border ? "black" : "none");
   svg.appendChild(sphere);
 
   let naturalEarth = null;
@@ -115,6 +116,8 @@ async function render({ model, el }) {
     graticule.setAttribute("opacity", "0.5");
     svg.appendChild(graticule);
   }
+
+  svg.style.border = "2px solid black";
 
   function redraw() {
     sphere.setAttribute("d", path({ type: "Sphere" }));
