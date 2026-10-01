@@ -31,6 +31,7 @@ class Map(anywidget.AnyWidget):
     projection_parallels = traitlets.Tuple(traitlets.Float(), traitlets.Float(), allow_none=True, default_value=None).tag(sync=True)
     layers = traitlets.List().tag(sync=True)
     dynamic = traitlets.Unicode("pan").tag(sync=True)
+    basemap = traitlets.Unicode("").tag(sync=True)
     hamburger = traitlets.Bool(True).tag(sync=True)
 
     class Export:
@@ -40,12 +41,10 @@ class Map(anywidget.AnyWidget):
         def svg(self, path):
             raise NotImplementedError
 
-    def __init__(self, center=(0.0, 0.0), zoom=1.0, projection=None, graticule=False, border=True, basemap="naturalearth", hamburger=True, dynamic=True):
+    def __init__(self, center=(0.0, 0.0), zoom=1.0, projection=None, graticule=False, border=True, basemap=False, hamburger=True, dynamic=True):
         if center != (0.0, 0.0):
             raise NotImplementedError
         if zoom != 1.0:
-            raise NotImplementedError
-        if basemap != "naturalearth":
             raise NotImplementedError
         if projection is None:
             projection = Projection()
@@ -59,6 +58,12 @@ class Map(anywidget.AnyWidget):
         self.projection_parallels = projection.parallels
         self.border = border
         self.graticule = graticule
+        if basemap == "naturalearth" or basemap == True:
+            self.basemap = "naturalearth"
+        elif basemap == False:
+            self.basemap = ""
+        else:
+            raise ValueError(f"basemap must be 'naturalearth', True, or False")
         self.hamburger = hamburger
         if dynamic is True or dynamic is False:
             self.dynamic = "pan" if dynamic else "none" #TODO: figure out how to make it decide mode based on whether or not the projection is globe-like

@@ -68,6 +68,7 @@ async function render({ model, el }) {
   const path = d3.geoPath(projection);
   const baseScale = projection.scale();
   const baseTranslate = projection.translate();
+  const basemap = model.get("basemap");
 
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", "0 0 960 500");
@@ -78,10 +79,13 @@ async function render({ model, el }) {
   sphere.setAttribute("stroke", model.get("border") ? "black" : "none");
   svg.appendChild(sphere);
 
-  const naturalEarth = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  naturalEarth.setAttribute("fill", "none");
-  naturalEarth.setAttribute("stroke", "black");
-  svg.appendChild(naturalEarth);
+  let naturalEarth = null;
+  if (basemap === "naturalearth") {
+    naturalEarth = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    naturalEarth.setAttribute("fill", "none");
+    naturalEarth.setAttribute("stroke", "black");
+    svg.appendChild(naturalEarth);
+  }
 
   const layerGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
   svg.appendChild(layerGroup);
@@ -114,7 +118,7 @@ async function render({ model, el }) {
 
   function redraw() {
     sphere.setAttribute("d", path({ type: "Sphere" }));
-    naturalEarth.setAttribute("d", path(countries));
+    if (naturalEarth) naturalEarth.setAttribute("d", path(countries));
     if (graticule) graticule.setAttribute("d", path(d3.geoGraticule()()));
     drawLayers();
   }
