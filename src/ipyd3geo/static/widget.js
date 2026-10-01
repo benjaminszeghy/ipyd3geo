@@ -19,9 +19,16 @@ async function render({ model, el }) {
     menuContent.style.border = "1px solid black";
 
     const exportSvgButton = document.createElement("div");
-    exportSvgButton.textContent = "Export SVG !!placeholder not implemented!!";
+    exportSvgButton.textContent = "Export SVG";
     exportSvgButton.addEventListener('click', () => {
-      alert('Export SVG was clicked!');
+      const svgString = new XMLSerializer().serializeToString(svg);
+      const blob = new Blob([svgString], { type: "image/svg+xml" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "map.svg";
+      a.click();
+      URL.revokeObjectURL(url);
     });
     menuContent.appendChild(exportSvgButton);
 
