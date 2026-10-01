@@ -41,6 +41,7 @@ include = [
 dev = [
     "ipykernel>=7.3.0",
     "jupyterlab>=4.6.4",
+    "pre-commit>=4.6.2",
     "pytest>=9.1.1",
 ]
 docs = [
@@ -52,3 +53,35 @@ docs = [
 
 [tool.uv.dependency-groups]
 docs = { requires-python = ">=3.12" }
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    # D203/D213 are mutually exclusive with D211/D212; one of each pair must go.
+    "D203",
+    "D213",
+    # Ruff's own docs: these conflict with `ruff format` and cause fix loops.
+    "COM812",
+    "ISC001",
+    # Copyright headers are a legal assertion the author hasn't chosen to make;
+    # licensing is declared in LICENSE and pyproject.toml instead.
+    "CPY001",
+    # Google/Napoleon style documents constructor arguments in the class
+    # docstring (see `Args:` there), which Sphinx renders; a second docstring on
+    # __init__ would just duplicate it.
+    "D107",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+# Sphinx executes conf.py as a script, so it is not (and must not be) a package.
+# Sphinx also requires the config variable to be named `copyright`.
+"docs/conf.py" = ["INP001", "A001"]
+# pytest relies on bare asserts.
+"tests/**" = ["S101"]

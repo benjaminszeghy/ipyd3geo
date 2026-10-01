@@ -1,3 +1,5 @@
+"""Sphinx configuration for the ipyd3geo docs."""
+
 project = "ipyd3geo"
 author = "Benjamin Szeghy"
 copyright = "2026, Benjamin Szeghy"

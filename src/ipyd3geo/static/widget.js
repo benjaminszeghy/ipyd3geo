@@ -3,7 +3,6 @@ import { zoom } from "https://esm.sh/d3-zoom@3.0.0";
 import { select } from "https://esm.sh/d3-selection@3.0.0";
 
 async function render({ model, el }) {
-
   if (model.get("hamburger")) {
     const menuButton = document.createElement("button");
     menuButton.textContent = "☰";
@@ -20,7 +19,7 @@ async function render({ model, el }) {
 
     const exportSvgButton = document.createElement("div");
     exportSvgButton.textContent = "Export SVG";
-    exportSvgButton.addEventListener('click', () => {
+    exportSvgButton.addEventListener("click", () => {
       const svgString = new XMLSerializer().serializeToString(svg);
       const blob = new Blob([svgString], { type: "image/svg+xml" });
       const url = URL.createObjectURL(blob);
@@ -32,29 +31,30 @@ async function render({ model, el }) {
     });
     menuContent.appendChild(exportSvgButton);
 
-//TODO this is the wrong approach to toggling graticule visibility, bc it doesn't toggle on if it didn't start visible.
+    //TODO this is the wrong approach to toggling graticule visibility, bc it doesn't toggle on if it didn't start visible.
     const graticuleButton = document.createElement("div");
     graticuleButton.textContent = `Toggle Graticule${model.get("graticule") ? " ✓" : ""}`;
-    graticuleButton.addEventListener('click', () => {
+    graticuleButton.addEventListener("click", () => {
       if (graticule) {
-        const isShown = graticule.style.display === 'none';
-        graticule.style.display = isShown ? 'block' : 'none';
+        const isShown = graticule.style.display === "none";
+        graticule.style.display = isShown ? "block" : "none";
         model.set("graticule", isShown);
         model.save_changes();
-        graticuleButton.textContent = `Toggle Graticule${isShown ? ' ✓' : ''}`;
+        graticuleButton.textContent = `Toggle Graticule${isShown ? " ✓" : ""}`;
       }
     });
     menuContent.appendChild(graticuleButton);
 
     el.appendChild(menuContent);
 
-    menuButton.addEventListener('click', () => {
-      menuContent.style.display = menuContent.style.display === 'none' ? 'block' : 'none';
+    menuButton.addEventListener("click", () => {
+      menuContent.style.display =
+        menuContent.style.display === "none" ? "block" : "none";
     });
   }
 
   const countries = await fetch(
-    "https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector/geojson/ne_110m_admin_0_countries.geojson"
+    "https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector/geojson/ne_110m_admin_0_countries.geojson",
   ).then((res) => res.json());
 
   const projection = d3[model.get("projection")]();
@@ -82,20 +82,29 @@ async function render({ model, el }) {
 
   let naturalEarth = null;
   if (basemap === "naturalearth") {
-    naturalEarth = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    naturalEarth = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "path",
+    );
     naturalEarth.setAttribute("fill", "none");
     naturalEarth.setAttribute("stroke", "black");
     svg.appendChild(naturalEarth);
   }
 
-  const layerGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  const layerGroup = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "g",
+  );
   svg.appendChild(layerGroup);
   function drawLayers() {
     layerGroup.replaceChildren();
     for (const layerData of model.get("layers")) {
       for (const feature of layerData.features) {
         const style = feature.properties.__ipyd3geo_style__ || {};
-        const layer = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        const layer = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "path",
+        );
         layer.setAttribute("d", path(feature));
         layer.setAttribute("fill", style.fill_color || "none");
         layer.setAttribute("stroke", style.stroke_color || "#000000");
@@ -145,7 +154,10 @@ async function render({ model, el }) {
           ]);
         }
       } else {
-        projection.translate([t.x + baseTranslate[0] * t.k, t.y + baseTranslate[1] * t.k]);
+        projection.translate([
+          t.x + baseTranslate[0] * t.k,
+          t.y + baseTranslate[1] * t.k,
+        ]);
       }
       prev = { x: t.x, y: t.y };
       redraw();

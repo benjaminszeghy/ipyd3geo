@@ -1,0 +1,34 @@
+exclude: ^(node_modules/|\.venv/|docs/_build/)
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        exclude: ^pnpm-lock\.yaml$ # generated multi-document lockfile
+      - id: check-toml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+      - id: mixed-line-ending
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.10
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+      - id: ruff-format
+
+  # The pre-commit/mirrors-prettier repo is archived (stops at 3.1.0), so run
+  # prettier through a local node hook instead.
+  - repo: local
+    hooks:
+      - id: prettier
+        name: prettier
+        entry: prettier --write --ignore-unknown
+        language: node
+        additional_dependencies: ["prettier@3.6.2"]
+        types_or: [javascript, json, markdown, yaml, toml, css, html]
+        exclude: ^(pnpm-lock\.yaml|uv\.lock)$
