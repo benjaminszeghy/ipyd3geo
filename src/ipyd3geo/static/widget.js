@@ -32,13 +32,19 @@ async function render({ model, el }) {
     });
     menuContent.appendChild(exportSvgButton);
 
-
-    const menuItem2 = document.createElement("div");
-    menuItem2.textContent = "Item 2";
-    menuItem2.addEventListener('click', () => {
-      alert('Item 2 was clicked!');
+//TODO this is the wrong approach to toggling graticule visibility, bc it doesn't toggle on if it didn't start visible.
+    const graticuleButton = document.createElement("div");
+    graticuleButton.textContent = `Toggle Graticule${model.get("graticule") ? " ✓" : ""}`;
+    graticuleButton.addEventListener('click', () => {
+      if (graticule) {
+        const isShown = graticule.style.display === 'none';
+        graticule.style.display = isShown ? 'block' : 'none';
+        model.set("graticule", isShown);
+        model.save_changes();
+        graticuleButton.textContent = `Toggle Graticule${isShown ? ' ✓' : ''}`;
+      }
     });
-    menuContent.appendChild(menuItem2);
+    menuContent.appendChild(graticuleButton);
 
     el.appendChild(menuContent);
 
