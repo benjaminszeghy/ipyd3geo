@@ -4,39 +4,41 @@ import { select } from "https://esm.sh/d3-selection@3";
 
 async function render({ model, el }) {
 
-  const menuButton = document.createElement("button");
-  menuButton.textContent = "☰";
-  menuButton.style.display = "block";
-  el.appendChild(menuButton);
-  const menuContent = document.createElement("div");
-  menuContent.style.display = "none";
-  menuContent.style.position = "absolute";
-  menuContent.style.color = "black";
-  menuContent.style.cursor = "pointer";
-  menuContent.style.backgroundColor = "lightgray";
-  menuContent.style.padding = "5px";
-  menuContent.style.border = "1px solid black";
+  if (model.get("hamburger")) {
+    const menuButton = document.createElement("button");
+    menuButton.textContent = "☰";
+    menuButton.style.display = "block";
+    el.appendChild(menuButton);
+    const menuContent = document.createElement("div");
+    menuContent.style.display = "none";
+    menuContent.style.position = "absolute";
+    menuContent.style.color = "black";
+    menuContent.style.cursor = "pointer";
+    menuContent.style.backgroundColor = "lightgray";
+    menuContent.style.padding = "5px";
+    menuContent.style.border = "1px solid black";
 
-  const exportSvgButton = document.createElement("div");
-  exportSvgButton.textContent = "Export SVG !!placeholder not implemented!!";
-  exportSvgButton.addEventListener('click', () => {
-    alert('Export SVG was clicked!');
-  });
-  menuContent.appendChild(exportSvgButton);
+    const exportSvgButton = document.createElement("div");
+    exportSvgButton.textContent = "Export SVG !!placeholder not implemented!!";
+    exportSvgButton.addEventListener('click', () => {
+      alert('Export SVG was clicked!');
+    });
+    menuContent.appendChild(exportSvgButton);
 
 
-  const menuItem2 = document.createElement("div");
-  menuItem2.textContent = "Item 2";
-  menuItem2.addEventListener('click', () => {
-    alert('Item 2 was clicked!');
-  });
-  menuContent.appendChild(menuItem2);
+    const menuItem2 = document.createElement("div");
+    menuItem2.textContent = "Item 2";
+    menuItem2.addEventListener('click', () => {
+      alert('Item 2 was clicked!');
+    });
+    menuContent.appendChild(menuItem2);
 
-  el.appendChild(menuContent);
+    el.appendChild(menuContent);
 
-  menuButton.addEventListener('click', () => {
-    menuContent.style.display = menuContent.style.display === 'none' ? 'block' : 'none';
-  });
+    menuButton.addEventListener('click', () => {
+      menuContent.style.display = menuContent.style.display === 'none' ? 'block' : 'none';
+    });
+  }
 
   const countries = await fetch(
     "https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector/geojson/ne_110m_admin_0_countries.geojson"
