@@ -56,6 +56,57 @@ class Map(anywidget.AnyWidget):
     projection_parallels = traitlets.Tuple(
         traitlets.Float(), traitlets.Float(), allow_none=True, default_value=None
     ).tag(sync=True)
+    projection_a = traitlets.Float(allow_none=True, default_value=None).tag(sync=True)
+    projection_alpha = traitlets.Float(allow_none=True, default_value=None).tag(
+        sync=True
+    )
+    projection_b = traitlets.Float(allow_none=True, default_value=None).tag(sync=True)
+    projection_coefficient = traitlets.Float(allow_none=True, default_value=None).tag(
+        sync=True
+    )
+    projection_cutoff_latitude = traitlets.Float(
+        allow_none=True, default_value=None
+    ).tag(sync=True)
+    projection_distance = traitlets.Float(allow_none=True, default_value=None).tag(
+        sync=True
+    )
+    projection_fraction = traitlets.Float(allow_none=True, default_value=None).tag(
+        sync=True
+    )
+    projection_gamma = traitlets.Float(allow_none=True, default_value=None).tag(
+        sync=True
+    )
+    projection_inflation = traitlets.Float(allow_none=True, default_value=None).tag(
+        sync=True
+    )
+    projection_k = traitlets.Float(allow_none=True, default_value=None).tag(sync=True)
+    projection_lobes = traitlets.Union(
+        [traitlets.Int(), traitlets.List()], allow_none=True, default_value=None
+    ).tag(sync=True)
+    projection_parallel = traitlets.Float(allow_none=True, default_value=None).tag(
+        sync=True
+    )
+    projection_poleline = traitlets.Float(allow_none=True, default_value=None).tag(
+        sync=True
+    )
+    projection_psi_max = traitlets.Float(allow_none=True, default_value=None).tag(
+        sync=True
+    )
+    projection_radius = traitlets.Float(allow_none=True, default_value=None).tag(
+        sync=True
+    )
+    projection_ratio = traitlets.Float(allow_none=True, default_value=None).tag(
+        sync=True
+    )
+    projection_shift = traitlets.Float(allow_none=True, default_value=None).tag(
+        sync=True
+    )
+    projection_spacing = traitlets.Float(allow_none=True, default_value=None).tag(
+        sync=True
+    )
+    projection_tilt = traitlets.Float(allow_none=True, default_value=None).tag(
+        sync=True
+    )
     layers = traitlets.List().tag(sync=True)
     dynamic = traitlets.Unicode("pan").tag(sync=True)
     basemap = traitlets.Unicode("").tag(sync=True)
@@ -76,7 +127,9 @@ class Map(anywidget.AnyWidget):
 
     # The many options mirror the documented public API; everything past
     # `projection` is keyword-only so the boolean flags can't be mixed up.
-    def __init__(  # noqa: PLR0913
+    # Each projection option is copied onto its own synced trait, one statement
+    # apiece, which pushes the statement count past the limit.
+    def __init__(  # noqa: PLR0913, PLR0915
         self,
         center: tuple[float, float] = (0.0, 0.0),
         zoom: float = 1.0,
@@ -100,6 +153,25 @@ class Map(anywidget.AnyWidget):
         self.projection_center = projection.center
         self.projection_precision = projection.precision
         self.projection_parallels = projection.parallels
+        self.projection_a = projection.a
+        self.projection_alpha = projection.alpha
+        self.projection_b = projection.b
+        self.projection_coefficient = projection.coefficient
+        self.projection_cutoff_latitude = projection.cutoff_latitude
+        self.projection_distance = projection.distance
+        self.projection_fraction = projection.fraction
+        self.projection_gamma = projection.gamma
+        self.projection_inflation = projection.inflation
+        self.projection_k = projection.k
+        self.projection_lobes = projection.lobes
+        self.projection_parallel = projection.parallel
+        self.projection_poleline = projection.poleline
+        self.projection_psi_max = projection.psi_max
+        self.projection_radius = projection.radius
+        self.projection_ratio = projection.ratio
+        self.projection_shift = projection.shift
+        self.projection_spacing = projection.spacing
+        self.projection_tilt = projection.tilt
         self.border = border
         self.graticule = graticule
         if basemap in {"naturalearth", True}:
@@ -145,28 +217,99 @@ class Projection:
 
     Args:
         name (str): The name of the projection. Defaults to "geoEqualEarth". See
-            `d3-geo geoProjection docs
-            <https://d3js.org/d3-geo/projection#geoProjection>`_ for options.
+            `d3-geo <https://d3js.org/d3-geo/projection#geoProjection>`_,
+            `d3-geo-projection <https://github.com/d3/d3-geo-projection>`_, and
+            `d3-geo-polygon <https://github.com/d3/d3-geo-polygon>`_ for options.
         rotate (tuple): The rotation of the projection.
         center (tuple): The center of the projection.
         precision (float): The precision of the projection.
+        *the following are projection-specific. Use the above linked documentation
+            to determine which are applicable for your projection.*
         parallels (tuple): The parallels of the projection. Only applicable for
             conic projections.
+        a (float): The a parameter. Only applicable for geoHufnagel.
+        alpha (float): The alpha parameter. Only applicable for
+            geoHyperelliptical and geoFoucautSinusoidal.
+        b (float): The b parameter. Only applicable for geoHufnagel.
+        coefficient (float): The coefficient. Only applicable for geoHammer.
+        cutoff_latitude (float): The cutoff latitude. Only applicable for
+            geoComplexLog.
+        distance (float): The distance from the center of the sphere. Only
+            applicable for geoSatellite.
+        fraction (float): The fraction. Only applicable for geoBottomley.
+        gamma (float): The gamma parameter. Only applicable for
+            geoHyperelliptical.
+        inflation (float): The inflation. Only applicable for geoWagner.
+        k (float): The k parameter. Only applicable for geoHyperelliptical,
+            geoImago, and geoImagoBlock.
+        lobes (int or list): The lobes. Only applicable for interrupted
+            projections, geoBerghaus, geoGingery, and geoHealpix.
+        parallel (float): The parallel. Only applicable for projections with a
+            single standard parallel, such as geoBonne.
+        poleline (float): The pole line. Only applicable for geoWagner.
+        psi_max (float): The psi max parameter. Only applicable for geoHufnagel.
+        radius (float): The radius. Only applicable for geoAiry and geoGingery.
+        ratio (float): The ratio. Only applicable for geoHill, geoHufnagel, and
+            geoWagner.
+        shift (float): The shift. Only applicable for geoImago.
+        spacing (float): The spacing. Only applicable for geoLagrange.
+        tilt (float): The tilt. Only applicable for geoSatellite.
     """
 
-    def __init__(
+    # Each projection-specific option from d3-geo-projection and d3-geo-polygon
+    # is its own keyword-only argument, mirroring the documented public API.
+    def __init__(  # noqa: PLR0913
         self,
         name: str = "geoEqualEarth",
         rotate: tuple[float, float, float] = (0, 0, 0),
         center: tuple[float, float] | None = None,
         precision: float | None = None,
         parallels: tuple[float, float] | None = None,
+        *,
+        a: float | None = None,
+        alpha: float | None = None,
+        b: float | None = None,
+        coefficient: float | None = None,
+        cutoff_latitude: float | None = None,
+        distance: float | None = None,
+        fraction: float | None = None,
+        gamma: float | None = None,
+        inflation: float | None = None,
+        k: float | None = None,
+        lobes: int | list | None = None,
+        parallel: float | None = None,
+        poleline: float | None = None,
+        psi_max: float | None = None,
+        radius: float | None = None,
+        ratio: float | None = None,
+        shift: float | None = None,
+        spacing: float | None = None,
+        tilt: float | None = None,
     ) -> None:
         self.name = name
         self.rotate = tuple(rotate)
         self.center = center
         self.precision = precision
         self.parallels = parallels
+        self.a = a
+        self.alpha = alpha
+        self.b = b
+        self.coefficient = coefficient
+        self.cutoff_latitude = cutoff_latitude
+        self.distance = distance
+        self.fraction = fraction
+        self.gamma = gamma
+        self.inflation = inflation
+        self.k = k
+        self.lobes = lobes
+        self.parallel = parallel
+        self.poleline = poleline
+        self.psi_max = psi_max
+        self.radius = radius
+        self.ratio = ratio
+        self.shift = shift
+        self.spacing = spacing
+        self.tilt = tilt
 
 
 class VectorStyle:

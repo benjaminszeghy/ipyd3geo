@@ -210,6 +210,12 @@ importers:
       d3-geo:
         specifier: ^3.1.1
         version: 3.1.1
+      d3-geo-polygon:
+        specifier: ^2.0.1
+        version: 2.0.1
+      d3-geo-projection:
+        specifier: ^4.0.0
+        version: 4.0.0
     devDependencies:
       esbuild:
         specifier: ^0.28.2
@@ -373,9 +379,22 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  commander@7.2.0:
+    resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
+    engines: {node: '>= 10'}
+
   d3-array@3.2.4:
     resolution: {integrity: sha512-tdQAmyA18i4J7wprpYq8ClcxZy3SC31QMeByyCFyRt7BVHdREQZ5lpzoe5mFEYZUWe+oq8HBvk9JjpibyEV4Jg==}
     engines: {node: '>=12'}
+
+  d3-geo-polygon@2.0.1:
+    resolution: {integrity: sha512-e+CxAgyQLWaitzftCisJ7DUIYhUzSN8VSbDozouKp3bMb6QbRrRLShplpPLYisuyyZLtrdC1+5yAjpiTOne33g==}
+    engines: {node: '>=18'}
+
+  d3-geo-projection@4.0.0:
+    resolution: {integrity: sha512-p0bK60CEzph1iqmnxut7d/1kyTmm3UWtPlwdkM31AU+LW+BXazd5zJdoCn7VFxNCHXRngPHRnsNn5uGjLRGndg==}
+    engines: {node: '>=12'}
+    hasBin: true
 
   d3-geo@3.1.1:
     resolution: {integrity: sha512-637ln3gXKXOwhalDzinUgY83KzNWZRKbYubaG+fGVuc/dxO64RRljtCTnf5ecMyE1RIdtqpkVcq0IbtU2S8j2Q==}
@@ -470,9 +489,23 @@ snapshots:
   '@esbuild/win32-x64@0.28.2':
     optional: true
 
+  commander@7.2.0: {}
+
   d3-array@3.2.4:
     dependencies:
       internmap: 2.0.3
+
+  d3-geo-polygon@2.0.1:
+    dependencies:
+      d3-array: 3.2.4
+      d3-geo: 3.1.1
+      d3-geo-projection: 4.0.0
+
+  d3-geo-projection@4.0.0:
+    dependencies:
+      commander: 7.2.0
+      d3-array: 3.2.4
+      d3-geo: 3.1.1
 
   d3-geo@3.1.1:
     dependencies:
