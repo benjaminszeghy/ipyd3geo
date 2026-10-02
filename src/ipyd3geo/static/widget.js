@@ -1,6 +1,10 @@
-import * as d3 from "https://esm.sh/d3-geo@3.1.1";
+import * as d3geo from "https://esm.sh/d3-geo@3.1.1";
+import * as d3geoProjection from "https://esm.sh/d3-geo-projection@4.0.0";
+import * as d3geoPolygon from "https://esm.sh/d3-geo-polygon@2.0.1";
 import { zoom } from "https://esm.sh/d3-zoom@3.0.0";
 import { select } from "https://esm.sh/d3-selection@3.0.0";
+
+const d3 = { ...d3geo, ...d3geoProjection, ...d3geoPolygon };
 
 async function render({ model, el }) {
   if (model.get("hamburger")) {
@@ -65,6 +69,44 @@ async function render({ model, el }) {
   if (precision != null) projection.precision(precision);
   const parallels = model.get("projection_parallels");
   if (parallels) projection.parallels(parallels);
+  const a = model.get("projection_a");
+  if (a != null) projection.a(a);
+  const alpha = model.get("projection_alpha");
+  if (alpha != null) projection.alpha(alpha);
+  const b = model.get("projection_b");
+  if (b != null) projection.b(b);
+  const coefficient = model.get("projection_coefficient");
+  if (coefficient != null) projection.coefficient(coefficient);
+  const cutoffLatitude = model.get("projection_cutoff_latitude");
+  if (cutoffLatitude != null) projection.cutoffLatitude(cutoffLatitude);
+  const distance = model.get("projection_distance");
+  if (distance != null) projection.distance(distance);
+  const fraction = model.get("projection_fraction");
+  if (fraction != null) projection.fraction(fraction);
+  const gamma = model.get("projection_gamma");
+  if (gamma != null) projection.gamma(gamma);
+  const inflation = model.get("projection_inflation");
+  if (inflation != null) projection.inflation(inflation);
+  const k = model.get("projection_k");
+  if (k != null) projection.k(k);
+  const lobes = model.get("projection_lobes");
+  if (lobes != null) projection.lobes(lobes);
+  const parallel = model.get("projection_parallel");
+  if (parallel != null) projection.parallel(parallel);
+  const poleline = model.get("projection_poleline");
+  if (poleline != null) projection.poleline(poleline);
+  const psiMax = model.get("projection_psi_max");
+  if (psiMax != null) projection.psiMax(psiMax);
+  const radius = model.get("projection_radius");
+  if (radius != null) projection.radius(radius);
+  const ratio = model.get("projection_ratio");
+  if (ratio != null) projection.ratio(ratio);
+  const shift = model.get("projection_shift");
+  if (shift != null) projection.shift(shift);
+  const spacing = model.get("projection_spacing");
+  if (spacing != null) projection.spacing(spacing);
+  const tilt = model.get("projection_tilt");
+  if (tilt != null) projection.tilt(tilt);
   const path = d3.geoPath(projection);
   const baseScale = projection.scale();
   const baseTranslate = projection.translate();
